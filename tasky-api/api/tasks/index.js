@@ -1,21 +1,40 @@
 import express from 'express';
-import { tasksData } from './tasksData';
+import { tasksData } from './tasksData.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.json(tasksData);
+  res.json(tasksData);
 });
 
-// Get task details
 router.get('/:id', (req, res) => {
-    const { id } = req.params
-    const task = tasksData.tasks.find(task => task.id === id);
-    if (!task) {
-        return res.status(404).json({ status: 404, message: 'Task not found' });
-    }
-    return res.status(200).json(task);
+  const { id } = req.params;
+  const task = tasksData.tasks.find((t) => t.id === id);
+
+  if (!task) {
+    return res.status(404).json({ status: 404, message: 'Task not found' });
+  }
+
+  return res.status(200).json(task);
 });
 
+router.post('/', (req, res) => {
+  const { title, description, deadline, priority, done } = req.body;
+
+  const newTask = {
+    id: uuidv4(),
+    title,
+    description,
+    deadline,
+    priority,
+    done,
+  };
+
+  tasksData.tasks.push(newTask);
+  tasksData.total_results += 1;
+
+  return res.status(201).json(newTask);
+});
 
 export default router;
