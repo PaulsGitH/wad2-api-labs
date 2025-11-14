@@ -1,5 +1,5 @@
 {
-  "name": "node_lab1",
+  "name": "tasky-api",
   "version": "1.0.0",
   "description": "node lab 1",
   "main": "index.js",
